@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,7 +17,19 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "joi": "^18.1.2",
     "jsonwebtoken": "^9.0.3",
+    "mongodb-memory-server": "^11.0.1",
+    "mongoose": "^9.5.0",
+    "morgan": "^1.10.1",
     "sqlite3": "^6.0.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atul479/se-1-rental-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atul479/se-1-rental-app/issues"
+  },
+  "homepage": "https://github.com/atul479/se-1-rental-app#readme"
 }

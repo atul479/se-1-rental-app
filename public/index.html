@@ -3,26 +3,420 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Rental App</title>
-    <link rel="stylesheet" href="style.css">
+    <title>DriveElite | Premium Vehicle Rental</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #1e1b4b;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); }
+
+        nav { background: var(--secondary); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; color: white; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
+        .logo span { color: var(--accent); }
+        .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+        .icon-btn { width: auto; padding: 0.55rem 0.9rem; border-radius: 999px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); display: inline-flex; align-items: center; gap: 0.45rem; }
+        .icon-btn:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+        .icon { font-size: 1rem; line-height: 1; }
+
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+
+        /* Auth Styles */
+        #auth-section { max-width: 520px; margin: 5rem auto; background: white; padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        h2 { margin-bottom: 1.5rem; font-weight: 800; font-size: 2rem; color: var(--secondary); }
+        input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+        .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 0.75rem; }
+        .form-grid .full-width { grid-column: 1 / -1; }
+        select { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; outline: none; transition: 0.3s; background: white; }
+        select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+        button { width: 100%; padding: 0.8rem; background: var(--primary); color: white; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #4f46e5; transform: translateY(-1px); }
+        .register-only { display: none; }
+        #auth-section.register-mode .register-only { display: block; }
+
+        /* Dashboard Styles */
+        #dashboard { display: none; }
+        .dashboard-hero { background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(245,158,11,0.12)); border: 1px solid #e2e8f0; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .dashboard-topline { display: flex; justify-content: space-between; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        .dashboard-meta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+        .meta-pill { background: white; border: 1px solid #e2e8f0; padding: 0.65rem 0.9rem; border-radius: 999px; font-size: 0.9rem; font-weight: 600; color: var(--secondary); }
+        .meta-pill strong { color: var(--primary); }
+        .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+        .toolbar button, .toolbar select, .toolbar input { margin-bottom: 0; }
+        .toolbar input, .toolbar select { flex: 1 1 180px; }
+        .filter-panel { display: none; margin-top: 1rem; padding: 1rem; border-radius: 1rem; background: rgba(255,255,255,0.8); border: 1px solid #e2e8f0; }
+        .filter-panel.active { display: block; }
+        .filter-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+        .filter-grid input, .filter-grid select { margin-bottom: 0; }
+        .filter-actions { display: flex; gap: 0.75rem; margin-top: 0.75rem; }
+        .filter-actions button { width: auto; padding-inline: 1rem; }
+        .secondary-btn { background: #e2e8f0; color: var(--secondary); }
+        .secondary-btn:hover { background: #cbd5e1; }
+        .hero-title { display: flex; align-items: center; gap: 0.75rem; }
+        .hero-icon { width: 2.75rem; height: 2.75rem; border-radius: 0.9rem; background: var(--secondary); color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .small-label { color: #64748b; font-size: 0.9rem; margin-top: 0.25rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .category-block { margin-top: 1.5rem; }
+        .category-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; }
+        .category-title { font-size: 1.35rem; font-weight: 800; color: var(--secondary); }
+        .category-count { font-size: 0.88rem; color: #64748b; font-weight: 600; }
+        .card { background: var(--card); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); transition: 0.3s; border: 1px solid #f1f5f9; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .card-img { height: 200px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+        .card-content { padding: 1.5rem; }
+        .card-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .card-price { color: var(--primary); font-weight: 800; font-size: 1.5rem; margin-bottom: 1rem; }
+        .badge { background: #dcfce7; color: #166534; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 600; }
+        .badge.offline { background: #fee2e2; color: #b91c1c; }
+        .card-detail { color: #64748b; font-size: 0.92rem; line-height: 1.45; margin-bottom: 0.85rem; }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+        .tag { background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600; }
+        .empty-state { background: white; border: 1px dashed #cbd5e1; border-radius: 1.25rem; padding: 2rem; text-align: center; color: #64748b; margin-top: 2rem; }
+        .empty-state strong { display: block; color: var(--secondary); font-size: 1.05rem; margin-bottom: 0.35rem; }
+        .results-note { margin-top: 0.75rem; color: #64748b; font-size: 0.92rem; }
+
+        .hidden { display: none !important; }
+        #logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); width: auto; padding: 0.5rem 1rem; }
+
+        @media (max-width: 900px) {
+            .filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 640px) {
+            .dashboard-topline { align-items: flex-start; }
+            .filter-grid { grid-template-columns: 1fr; }
+            .toolbar { flex-direction: column; }
+            .toolbar button, .toolbar select, .toolbar input { width: 100%; }
+        }
+    </style>
 </head>
 <body>
-    <div class="dashboard-container" style="max-width: 900px;">
-        <h1>Rental Dashboard</h1>
-        <p>Welcome back, <span id="userName" style="font-weight: 700; color: var(--accent-color);"></span>!</p>
-        
-        <div class="user-info" style="display: flex; justify-content: space-around; padding: 1rem; border-radius: 15px; margin-bottom: 2rem;">
-            <p><strong>Email:</strong> <span id="userEmail"></span></p>
-            <p><strong>Role:</strong> <span id="userType" style="text-transform: capitalize;"></span></p>
+
+    <nav>
+        <div class="logo">DRIVE<span>ELITE</span></div>
+        <div class="nav-actions">
+            <button id="home-btn" class="icon-btn hidden" onclick="goHome()"><span class="icon">⌂</span> Home</button>
+            <button id="settings-btn" class="icon-btn hidden" onclick="toggleFilterPanel()"><span class="icon">⚙</span> Settings</button>
+            <button id="logout-btn" class="icon-btn hidden" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Auth Section -->
+        <div id="auth-section">
+            <h2 id="auth-title">Welcome Back</h2>
+            <div class="form-grid">
+                <input type="text" id="name" class="register-only full-width" placeholder="Full Name">
+                <input type="number" id="age" class="register-only" placeholder="Age" min="18">
+                <select id="gender" class="register-only">
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+                <input type="date" id="dob" class="register-only" placeholder="Date of Birth">
+                <input type="text" id="drivingLicenseNo" class="register-only" placeholder="Driving License No.">
+                <input type="tel" id="mobileNo" class="register-only" placeholder="Mobile No.">
+                <input type="email" id="email" class="full-width" placeholder="Email Address">
+                <input type="password" id="password" class="full-width" placeholder="Password">
+            </div>
+            <button onclick="handleAuth()" id="auth-btn">Sign In</button>
+            <p style="margin-top: 1rem; text-align: center; font-size: 0.875rem;">
+                <a href="#" onclick="toggleAuthMode()" id="auth-toggle">Need an account? Register</a>
+            </p>
         </div>
 
-        <h2 style="text-align: left; margin-top: 2rem; color: var(--secondary-color); font-weight: 700;">Available for Rent</h2>
-        <div class="rentals-grid" id="rentalsGrid">
-            <!-- Dynamic Content -->
-        </div>
+        <!-- Dashboard -->
+        <div id="dashboard">
+            <div class="dashboard-hero">
+                <div class="dashboard-topline">
+                    <div>
+                        <div class="hero-title">
+                            <div class="hero-icon">⌂</div>
+                            <div>
+                                <h2 style="margin-bottom: 0;">Available Fleet</h2>
+                                <div class="small-label">Browse, filter, and book vehicles based on your needs.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="color: var(--primary); font-weight: 700;">Welcome, <span id="user-name"></span></div>
+                </div>
 
-        <button id="logoutBtn" class="btn" style="margin-top: 3rem; max-width: 200px;">Logout</button>
+                <div class="dashboard-meta">
+                    <div class="meta-pill">Home view</div>
+                    <div class="meta-pill">Quick filter</div>
+                    <div class="meta-pill">Best match vehicles</div>
+                    <div class="meta-pill">Matches: <strong id="match-count">0</strong></div>
+                </div>
+
+                <div class="toolbar">
+                    <input type="text" id="search-keyword" placeholder="Search by vehicle name">
+                    <select id="quick-type">
+                        <option value="">All Types</option>
+                        <option value="Car">Car</option>
+                        <option value="Bike">Bike</option>
+                        <option value="Scooter">Scooty</option>
+                        <option value="Truck">Truck</option>
+                    </select>
+                    <select id="quick-sort">
+                        <option value="">Newest First</option>
+                        <option value="priceLow">Price: Low to High</option>
+                        <option value="priceHigh">Price: High to Low</option>
+                    </select>
+                    <button onclick="applyQuickFilters()"><span class="icon">🔎</span> Filter</button>
+                    <button class="secondary-btn" onclick="resetFilters()">Reset</button>
+                </div>
+
+                <div id="results-note" class="results-note">Showing all vehicles on the home page.</div>
+
+                <div id="filter-panel" class="filter-panel">
+                    <div class="filter-grid">
+                        <input type="text" id="filter-keyword" placeholder="Keyword">
+                        <select id="filter-type">
+                            <option value="">All Types</option>
+                            <option value="Car">Car</option>
+                            <option value="Bike">Bike</option>
+                            <option value="Scooter">Scooty</option>
+                            <option value="Truck">Truck</option>
+                        </select>
+                        <select id="filter-availability">
+                            <option value="">Any Availability</option>
+                            <option value="true">Available Only</option>
+                            <option value="false">Booked Only</option>
+                        </select>
+                        <input type="number" id="filter-max-price" placeholder="Max price/day" min="0">
+                        <select id="filter-sort">
+                            <option value="">Newest First</option>
+                            <option value="priceLow">Price: Low to High</option>
+                            <option value="priceHigh">Price: High to Low</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button onclick="applyDetailedFilters()"><span class="icon">⚙</span> Apply Settings</button>
+                        <button class="secondary-btn" onclick="clearDetailedFilters()">Clear</button>
+                    </div>
+                </div>
+            </div>
+            <div id="vehicle-grid" class="grid"></div>
+        </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let isLogin = true;
+        let token = localStorage.getItem('token');
+        let currentFilters = { keyword: '', type: '', availability: '', maxPrice: '' };
+
+        function toggleAuthMode() {
+            isLogin = !isLogin;
+            document.getElementById('auth-title').innerText = isLogin ? 'Welcome Back' : 'Create Account';
+            document.getElementById('auth-btn').innerText = isLogin ? 'Sign In' : 'Register';
+            document.getElementById('auth-toggle').innerText = isLogin ? 'Need an account? Register' : 'Have an account? Login';
+            document.getElementById('auth-section').classList.toggle('register-mode', !isLogin);
+        }
+
+        async function handleAuth() {
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const email = document.getElementById('email').value;
+            const dob = document.getElementById('dob').value;
+            const password = document.getElementById('password').value;
+            const drivingLicenseNo = document.getElementById('drivingLicenseNo').value;
+            const mobileNo = document.getElementById('mobileNo').value;
+            const endpoint = isLogin ? '/auth/login' : '/auth/register';
+            const body = isLogin
+                ? { email, password }
+                : { name, age: Number(age), gender, email, dob, password, drivingLicenseNo, mobileNo };
+
+            try {
+                const res = await fetch(`${API_URL}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await res.json();
+                
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data));
+                    showDashboard();
+                } else {
+                    alert(data.message || 'Auth Failed');
+                }
+            } catch (err) {
+                alert('Server Connection Failed');
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('home-btn').classList.remove('hidden');
+            document.getElementById('settings-btn').classList.remove('hidden');
+            document.getElementById('logout-btn').classList.remove('hidden');
+            
+            const user = JSON.parse(localStorage.getItem('user'));
+            document.getElementById('user-name').innerText = user.name;
+            fetchVehicles();
+        }
+
+        async function fetchVehicles(filters = {}) {
+            const params = new URLSearchParams();
+            if (filters.keyword) params.set('keyword', filters.keyword);
+            if (filters.type) params.set('type', filters.type);
+            if (filters.availability) params.set('availability', filters.availability);
+            if (filters.maxPrice) params.set('maxPrice', filters.maxPrice);
+            if (filters.sort) params.set('sort', filters.sort);
+
+            const query = params.toString();
+            const res = await fetch(`${API_URL}/vehicles${query ? `?${query}` : ''}`);
+            const data = await res.json();
+            const grid = document.getElementById('vehicle-grid');
+            const vehicles = data.vehicles || [];
+            document.getElementById('match-count').innerText = vehicles.length;
+            document.getElementById('results-note').innerText = query ? `Showing filtered results for ${query.replace(/&/g, ', ').replace(/=/g, ': ')}` : 'Showing all vehicles on the home page.';
+
+            if (!vehicles.length) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <strong>No vehicles found</strong>
+                        Try clearing the filters or changing the price/type settings.
+                    </div>
+                `;
+                return;
+            }
+
+            const categoryOrder = ['Car', 'Bike', 'Scooter', 'Truck'];
+            const typeLabel = {
+                Car: 'Car',
+                Bike: 'Bike',
+                Scooter: 'Scooty',
+                Truck: 'Truck'
+            };
+
+            const grouped = categoryOrder.map((type) => {
+                const items = vehicles.filter((v) => v.type === type);
+                return { type, items };
+            }).filter((group) => group.items.length > 0);
+
+            grid.innerHTML = grouped.map((group) => `
+                <section class="category-block" style="grid-column: 1 / -1;">
+                    <div class="category-heading">
+                        <div class="category-title">${typeLabel[group.type]} Models</div>
+                        <div class="category-count">${group.items.length} options</div>
+                    </div>
+                    <div class="grid">
+                        ${group.items.map(v => `
+                            <div class="card">
+                                <div class="card-img">${v.type === 'Car' ? '🚗' : v.type === 'Bike' ? '🏍️' : v.type === 'Scooter' ? '🛵' : '🚚'}</div>
+                                <div class="card-content">
+                                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                                        <div class="card-title">${v.model || v.name}</div>
+                                        <span class="badge ${v.availability ? '' : 'offline'}">${v.availability ? 'Available' : 'Booked'}</span>
+                                    </div>
+                                    <div class="card-tags">
+                                        <span class="tag">${typeLabel[v.type]}</span>
+                                        <span class="tag">${v.name}</span>
+                                        <span class="tag">${v.availability ? 'Ready to book' : 'Unavailable'}</span>
+                                    </div>
+                                    <div class="card-detail">${v.description || 'Premium rental option with flexible booking and quick confirmation.'}</div>
+                                    <div class="card-price">$${v.pricePerDay}<span>/day</span></div>
+                                    <button onclick="bookVehicle('${v._id}')">Rent Now</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `).join('');
+        }
+
+        function syncQuickFilters() {
+            document.getElementById('search-keyword').value = currentFilters.keyword || '';
+            document.getElementById('quick-type').value = currentFilters.type || '';
+            document.getElementById('quick-sort').value = currentFilters.sort || '';
+            document.getElementById('filter-keyword').value = currentFilters.keyword || '';
+            document.getElementById('filter-type').value = currentFilters.type || '';
+            document.getElementById('filter-availability').value = currentFilters.availability || '';
+            document.getElementById('filter-max-price').value = currentFilters.maxPrice || '';
+            document.getElementById('filter-sort').value = currentFilters.sort || '';
+        }
+
+        function applyQuickFilters() {
+            currentFilters.keyword = document.getElementById('search-keyword').value.trim();
+            currentFilters.type = document.getElementById('quick-type').value;
+            currentFilters.sort = document.getElementById('quick-sort').value;
+            syncQuickFilters();
+            fetchVehicles(currentFilters);
+        }
+
+        function applyDetailedFilters() {
+            currentFilters.keyword = document.getElementById('filter-keyword').value.trim();
+            currentFilters.type = document.getElementById('filter-type').value;
+            currentFilters.availability = document.getElementById('filter-availability').value;
+            currentFilters.maxPrice = document.getElementById('filter-max-price').value;
+            currentFilters.sort = document.getElementById('filter-sort').value;
+            syncQuickFilters();
+            fetchVehicles(currentFilters);
+        }
+
+        function clearDetailedFilters() {
+            currentFilters = { keyword: '', type: '', availability: '', maxPrice: '', sort: '' };
+            syncQuickFilters();
+            fetchVehicles(currentFilters);
+        }
+
+        function resetFilters() {
+            clearDetailedFilters();
+        }
+
+        function toggleFilterPanel() {
+            document.getElementById('filter-panel').classList.toggle('active');
+        }
+
+        function goHome() {
+            document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        async function bookVehicle(id) {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URL}/bookings`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    vehicleId: id,
+                    startDate: new Date().toISOString(),
+                    endDate: new Date(Date.now() + 86400000).toISOString()
+                })
+            });
+            const data = await res.json();
+            if (data._id) {
+                alert('Booking Created Successfully!');
+            } else {
+                alert(data.message);
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        if (token) {
+            showDashboard();
+            syncQuickFilters();
+        }
+    </script>
 </body>
 </html>
