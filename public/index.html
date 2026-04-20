@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Rental App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container" style="max-width: 900px;">
+        <h1>Rental Dashboard</h1>
+        <p>Welcome back, <span id="userName" style="font-weight: 700; color: var(--accent-color);"></span>!</p>
+        
+        <div class="user-info" style="display: flex; justify-content: space-around; padding: 1rem; border-radius: 15px; margin-bottom: 2rem;">
+            <p><strong>Email:</strong> <span id="userEmail"></span></p>
+            <p><strong>Role:</strong> <span id="userType" style="text-transform: capitalize;"></span></p>
+        </div>
+
+        <h2 style="text-align: left; margin-top: 2rem; color: var(--secondary-color); font-weight: 700;">Available for Rent</h2>
+        <div class="rentals-grid" id="rentalsGrid">
+            <!-- Dynamic Content -->
+        </div>
+
+        <button id="logoutBtn" class="btn" style="margin-top: 3rem; max-width: 200px;">Logout</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

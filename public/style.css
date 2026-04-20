@@ -1,0 +1,178 @@
+:root {
+    --primary-color: #f1c40f; 
+    --secondary-color: #2c3e50;
+    --accent-color: #e67e22;
+    --background-dark: #0f0f0f;
+    --glass-bg: rgba(255, 255, 255, 0.9);
+    --text-color: #333;
+    --error-color: #e74c3c;
+    --success-color: #2ecc71;
+    --shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-dark);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* Particle Canvas Background */
+#particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+}
+
+.auth-container, .dashboard-container {
+    background: var(--glass-bg);
+    padding: 3rem; /* Increased padding */
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    width: 95%; /* More responsive width */
+    max-width: 500px; /* Slightly wider */
+    text-align: center;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+    background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.5rem; /* Increased margin */
+    font-size: 2.5rem; /* Increased title size */
+    font-weight: 800;
+}
+
+.form-group {
+    margin-bottom: 1.5rem; /* More space between groups */
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem; /* Larger labels */
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 1rem; /* More padding inside inputs */
+    font-size: 1.1rem; /* Larger font size for input text */
+    border: 2px solid #ddd; /* Thicker border */
+    border-radius: 12px;
+    background: rgba(255,255,255,0.8);
+    box-sizing: border-box; /* Ensure padding doesn't break width */
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    transform: scale(1.02);
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+}
+
+.btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem; /* Larger button text */
+    font-weight: 700;
+    border-radius: 12px;
+    border: none;
+    background: var(--secondary-color);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.btn:hover {
+    background: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease-out;
+}
+
+.btn:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Booking Cards */
+.rentals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.rental-card {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rental-card:hover {
+    background: #fff;
+    transform: scale(1.05) rotate(1deg);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Modal styles for messages */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.booking-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--accent-color);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+
